@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONITORING ASET JARINGAN &amp; PELANGGAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F7FA; --blue:#00529C; --blue-d:#00305F; --blue-l:#2E8BE0;
+  --yellow:#FFC70C; --amber:#FF9F0A; --ink:#1A1A1A; --ink2:#4A5A6A; --line:rgba(0,48,95,.12);
+  --wm-plg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%2300529C' stroke-width='4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M10 50L50 15l40 35v40H10z'/%3E%3Cpath d='M35 90V60h30v30'/%3E%3Crect x='60' y='35' width='18' height='18' rx='2'/%3E%3C/svg%3E");
+  --wm-pylon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%2300529C' stroke-width='4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M60 6v20M16 34h88M28 56h64M60 26L34 156M60 26l26 130M42 106h36M34 156H14M86 156h20M60 26L42 106M60 26l18 80M42 106l-8 50M78 106l8 50M34 156l52-50M86 156L42 106M42 106l18-50M78 106L60 56'/%3E%3C/svg%3E");
+  --wm-gardu:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%2300529C' stroke-width='4' stroke-linejoin='round' stroke-linecap='round'%3E%3Crect x='15' y='25' width='70' height='65' rx='4'/%3E%3Cpath d='M10 25l40-15 40 15M50 25v65'/%3E%3Cpath d='M25 45h15v20H25zM60 45h15v20H60z'/%3E%3C/svg%3E");
+  --wm-trafo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 120' fill='none' stroke='%2300529C' stroke-width='4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M30 44h80v56H30zM38 44v56M50 44v56M62 44v56M74 44v56M86 44v56M98 44v56M26 100h88v8H26zM50 44V28M70 44V22M90 44V28M44 28h12M64 22h12M84 28h12M110 60h14v22h-14z'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;color:var(--ink);
+  background:radial-gradient(900px 420px at 8% -8%,rgba(46,139,224,.14),transparent 60%),radial-gradient(700px 400px at 100% 0,rgba(255,199,12,.12),transparent 60%),var(--bg)}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue-l);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 40px}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;z-index:50;margin:20px 0 22px;border-radius:22px;color:#fff;min-height:260px;
+  box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 18px 40px -14px rgba(0,48,95,.55),0 40px 60px -40px rgba(0,48,95,.6)}
+.hero-clip{position:absolute;inset:0;border-radius:22px;overflow:hidden;z-index:-1}
+.hero-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.6}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;opacity:.75}
+.hero-clip::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(100deg,rgba(0,28,60,.93) 0%,rgba(0,82,156,.72) 46%,rgba(0,82,156,.1) 100%)}
+.hero-clip::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;z-index:2;background:linear-gradient(90deg,var(--yellow),#FFE680 40%,transparent)}
+
+/* Container Logo Atas Header */
+.hero-brands{display:flex;justify-content:space-between;align-items:center;padding:20px 28px 0;position:relative;z-index:10}
+.brand-card{display:inline-flex;align-items:center;padding:8px 16px;border-radius:12px;background:rgba(255,255,255,.95);box-shadow:0 4px 15px rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.4)}
+
+.hero-in{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end;padding:16px 30px 24px}
+h1{margin:0;max-width:560px;font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.sub{margin:8px 0 0;font-size:15px;color:rgba(255,255,255,.9);font-weight:700}
+.ctl{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;align-items:center}
+.glass{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.84));color:var(--ink);border:0;border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px;
+  box-shadow:0 1px 0 #fff inset,0 -2px 0 rgba(0,48,95,.12) inset,0 8px 16px -4px rgba(0,20,50,.45)}
+.glass:hover{background:#fff}
+.glass svg{width:16px;height:16px;flex:none}
+select.glass{padding-right:8px}
+.mp{position:relative}
+.mp-btn{min-width:176px;justify-content:space-between}
+.mp-btn svg{transition:transform .2s}
+.mp-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.mp-panel{position:absolute;right:0;top:calc(100% + 8px);width:292px;z-index:60;padding:14px;border-radius:16px;color:var(--ink);
+  background:linear-gradient(#fff,#F4F7FA);box-shadow:0 1px 0 #fff inset,0 20px 40px -10px rgba(0,30,70,.5),0 0 0 1px var(--line)}
+.mp-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-weight:800;font-size:16px}
+.mp-nav{width:32px;height:32px;border-radius:10px;border:0;background:linear-gradient(#fff,#E8EEF5);box-shadow:0 1px 0 #fff inset,0 3px 6px rgba(0,48,95,.2);font-weight:800}
+.mp-nav:disabled{opacity:.35;cursor:not-allowed}
+.mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mp-m{border:0;border-radius:10px;padding:10px 0;font-weight:700;background:linear-gradient(#fff,#EAF0F7);box-shadow:0 1px 0 #fff inset,0 3px 6px rgba(0,48,95,.15)}
+.mp-m:hover:not(:disabled){background:linear-gradient(#fff,#DCE9F7)}
+.mp-m[aria-pressed="true"]{color:#fff;background:linear-gradient(180deg,var(--blue-l),var(--blue) 55%,var(--blue-d));box-shadow:0 2px 0 rgba(255,255,255,.35) inset,0 6px 12px rgba(0,82,156,.45)}
+.mp-m:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+.sync{--dot:#9FC4EE;display:flex;align-items:center;gap:11px;padding:8px 14px;border-radius:12px;background:rgba(0,20,50,.5);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sync[data-state="live"]{--dot:#2BD576}
+.sync[data-state="file"]{--dot:#7FC0FF}
+.sync[data-state="error"]{--dot:#FF5A4F}
+.dot{position:relative;width:10px;height:10px;border-radius:50%;background:var(--dot);box-shadow:0 0 10px var(--dot);flex:none}
+.dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--dot);animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.75}100%{transform:scale(3.2);opacity:0}}
+.sync strong{display:block;font-size:13px;font-weight:700;line-height:1.2}
+.sync small{display:block;font-size:12px;color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
+
+/* ---------- Layout ---------- */
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.g32{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:18px;margin-bottom:18px}
+
+/* ---------- 3D card ---------- */
+.card{position:relative;z-index:0;border-radius:18px;padding:18px 20px;overflow:hidden;
+  background:linear-gradient(180deg,#fff 0%,#F6F9FD 100%);
+  box-shadow:0 1px 0 #fff inset,0 -1px 0 rgba(0,82,156,.08) inset,0 0 0 1px rgba(0,48,95,.06),0 2px 4px rgba(0,40,90,.06),0 14px 26px -10px rgba(0,40,90,.22),0 34px 44px -28px rgba(0,40,90,.28)}
+.card>*{position:relative;z-index:1}
+
+/* Watermark khusus kartu KPI atas */
+.card::after{content:'';position:absolute;right:10px;bottom:6px;width:140px;height:140px;background-size:contain;background-repeat:no-repeat;background-position:center;opacity:.055;pointer-events:none;z-index:0}
+.card.wm-plg::after{background-image:var(--wm-plg)}
+.card.wm-pylon::after{background-image:var(--wm-pylon)}
+.card.wm-gardu::after{background-image:var(--wm-gardu)}
+.card.wm-trafo::after{background-image:var(--wm-trafo)}
+
+/* Gradasi & Hilang Watermark untuk Kartu Bagian Tengah (.wm-big) */
+.g3 .card, .card.wm-big {
+  background: linear-gradient(145deg, #FFFFFF 0%, #F0F5FA 50%, #E6EFF8 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 1px 0 #ffffff inset, 0 10px 25px -5px rgba(0, 48, 95, 0.10), 0 20px 35px -15px rgba(0, 48, 95, 0.08);
+}
+.g3 .card::after, .card.wm-big::after {
+  display: none !important;
+  content: none !important;
+}
+
+.card h2{margin:0;font-size:15px;font-weight:700}
+.hint{margin:2px 0 12px;font-size:12px;color:var(--ink2)}
+
+.kpi{padding-top:22px}
+.kpi::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;z-index:2;background:linear-gradient(90deg,var(--blue-d),var(--blue) 40%,var(--blue-l) 70%,var(--yellow));box-shadow:0 1px 0 rgba(255,255,255,.5) inset}
+.lbl{margin:0;font-size:13px;font-weight:500;color:var(--ink2)}
+.val{margin:4px 0 2px;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,var(--blue),var(--blue-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.val small{font-size:14px;font-weight:700;letter-spacing:0}
+.ksub{margin:0 0 10px;font-size:12px;color:var(--ink2)}
+.chip{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.chip.up{background:linear-gradient(#E3F1FF,#CFE5FA);color:var(--blue-d);box-shadow:0 1px 0 #fff inset}
+.chip.down{background:linear-gradient(#FFF1CC,#FFE08A);color:#6B4300;box-shadow:0 1px 0 #fff inset}
+.chip.flat{background:#EEF2F6;color:var(--ink2)}
+
+.cwrap{position:relative;height:250px}
+.lg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;font-size:12px;color:var(--ink2)}
+.lg span{display:flex;align-items:center;gap:6px}
+.lg i{width:11px;height:11px;border-radius:3px;display:inline-block;box-shadow:0 1px 2px rgba(0,0,0,.25),0 1px 0 rgba(255,255,255,.6) inset}
+.lg b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+.big{margin:6px 0 0;font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,var(--blue-l),var(--blue) 50%,var(--blue-d));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 3px rgba(0,48,95,.25))}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 6px;font-size:13px;color:var(--ink2)}
+.row b{color:var(--ink);font-variant-numeric:tabular-nums}
+.track{height:14px;border-radius:99px;background:linear-gradient(#DAE3EC,#EEF3F8);box-shadow:0 2px 4px rgba(0,40,90,.28) inset,0 1px 0 #fff;overflow:hidden}
+.fill{position:relative;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--blue-d),var(--blue) 45%,var(--blue-l) 78%,var(--yellow));box-shadow:0 2px 6px rgba(0,82,156,.5);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.fill::after{content:'';position:absolute;left:2px;right:2px;top:1px;height:45%;border-radius:99px;background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,0))}
+.fill.y{background:linear-gradient(90deg,var(--amber),var(--yellow) 60%,#FFE680);box-shadow:0 2px 6px rgba(255,159,10,.55)}
+.stat{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--ink2)}
+.stat:last-of-type{border-bottom:0}
+.stat b{font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- Table ---------- */
+.tw{overflow-x:auto;margin:0 -4px}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th{padding:8px 10px;text-align:left;font-size:12px;font-weight:700;color:var(--ink2);border-bottom:2px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.n{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+th.n{text-align:right}
+.tg{display:flex;align-items:center;gap:8px;border:0;background:none;padding:0;font-weight:700;text-align:left}
+.tg svg{width:14px;height:14px;flex:none;transition:transform .2s;color:var(--blue)}
+.tg[aria-expanded="true"] svg{transform:rotate(90deg)}
+.desc{display:block;margin-left:22px;font-size:12px;font-weight:500;color:var(--ink2)}
+tr.dt td{background:linear-gradient(180deg,#EEF4FB,#F6F9FD);box-shadow:0 3px 6px -3px rgba(0,48,95,.2) inset}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;padding:4px 0 4px 22px}
+.dc{padding:10px 12px;border-radius:12px;background:#fff;box-shadow:0 1px 0 #fff inset,0 0 0 1px var(--line),0 6px 10px -6px rgba(0,48,95,.3)}
+.dc p{margin:0;font-size:12px;color:var(--ink2)}
+.dc b{display:block;font-size:17px;font-variant-numeric:tabular-nums}
+
+.empty{padding:40px 20px;text-align:center;margin-bottom:18px}
+.empty h2{margin:0 0 6px;font-size:18px}
+.empty p{margin:0 auto;max-width:560px;color:var(--ink2)}
+.foot{margin:18px 4px 0;font-size:12px;color:var(--ink2)}
+
+/* ---------- Admin ---------- */
+.adm{margin-bottom:18px}
+.adm-row{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:18px;margin-bottom:12px}
+.adm label,.adm .lbl{display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:var(--ink)}
+.adm-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.adm input[type="text"],dialog input[type="password"]{flex:1;min-width:0;width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;box-shadow:0 2px 4px rgba(0,40,90,.12) inset}
+.adm .adm-f input[type="text"]{flex:1 1 220px;width:auto}
+.btn1,.btn2{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px}
+.btn1{color:#fff;background:linear-gradient(180deg,var(--blue-l),var(--blue) 55%,var(--blue-d));box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 12px -2px rgba(0,82,156,.45)}
+.btn2{background:linear-gradient(#fff,#E8EEF5);box-shadow:0 1px 0 #fff inset,0 0 0 1px var(--line),0 3px 6px rgba(0,48,95,.15)}
+.lnk{border:0;background:none;padding:0;color:var(--blue);font-weight:700;text-decoration:underline}
+dialog{border:0;border-radius:18px;padding:22px;width:min(360px,92vw);color:var(--ink);background:linear-gradient(#fff,#F4F7FA);box-shadow:0 30px 60px -10px rgba(0,30,70,.6)}
+dialog::backdrop{background:rgba(0,30,70,.55)}
+dialog h2{margin:0 0 4px;font-size:18px}
+dialog p{margin:0 0 14px;font-size:13px;color:var(--ink2)}
+dialog label{display:block;margin-bottom:6px;font-size:13px;font-weight:700}
+.err{margin:8px 0 0!important;color:#9A2A00!important;font-weight:700}
+.acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+@media (max-width:1020px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g32,.adm-row{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.g4{grid-template-columns:minmax(0,1fr)}.hero-in{padding:18px 18px 24px}.ctl{justify-content:flex-start}.mp-panel{right:auto;left:0}.big{font-size:46px}}
+@media (prefers-reduced-motion:reduce){.dot::after{animation:none}.fill,.tg svg,.mp-btn svg{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-clip" aria-hidden="true">
+      <div class="hero-img" id="heroImg" hidden></div>
+      <svg class="hero-art" id="heroArt" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#082F63"/><stop offset=".55" stop-color="#2E8BE0"/><stop offset="1" stop-color="#FFC70C"/>
+          </linearGradient>
+          <symbol id="pylon" viewBox="0 0 100 200">
+            <g fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round">
+              <path d="M50 4V30M8 40H92M20 66H80M50 30L28 196M50 30L72 196M33 150H67M40 108H60M28 196H12M72 196H88M8 40L50 30L92 40M50 30L40 108L60 108Z"/>
+              <path stroke-width="2" d="M40 108L33 150L67 150L60 108M33 150L60 108M67 150L40 108M40 108L60 66M60 108L40 66"/>
+            </g>
+          </symbol>
+          <symbol id="pole" viewBox="0 0 60 160">
+            <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+              <path d="M30 6V158M6 24H54M12 44H48"/>
+              <path stroke-width="4" d="M6 24v-8M54 24v-8M12 44v-8M48 44v-8"/>
+            </g>
+          </symbol>
+          <symbol id="house" viewBox="0 0 70 60">
+            <path d="M4 28L35 4L66 28V58H4Z" fill="#00305F"/>
+            <rect x="14" y="34" width="12" height="12" rx="1" fill="#FFD43B"/>
+            <rect x="44" y="34" width="12" height="12" rx="1" fill="#FFD43B"/>
+          </symbol>
+        </defs>
+        <rect width="1200" height="300" fill="url(#sky)"/>
+        <circle cx="560" cy="262" r="110" fill="#FFE680" opacity=".32"/>
+        <path d="M0 262Q220 218 450 256T860 244T1200 258V300H0Z" fill="#00305F" opacity=".6"/>
+
+        <g fill="none" stroke="#fff" stroke-width="1.6" opacity=".85">
+          <path d="M0 118Q20 126 50 108M150 108Q260 150 372 84M498 84Q600 150 709 116M801 116Q1000 168 1200 118"/>
+          <g transform="translate(0,22)" opacity=".7"><path d="M0 118Q20 126 50 108M150 108Q260 150 372 84M498 84Q600 150 709 116M801 116Q1000 168 1200 118"/></g>
+        </g>
+        <use href="#pylon" x="40" y="60" width="120" height="240"/>
+        <use href="#pylon" x="360" y="30" width="150" height="270"/>
+        <use href="#pylon" x="700" y="70" width="110" height="230"/>
+
+        <g opacity=".95">
+          <g fill="none" stroke="#fff" stroke-width="1.4">
+            <path d="M918 205Q956 224 994 205M1028 205Q1066 224 1104 205M1138 205Q1170 222 1200 210"/>
+          </g>
+          <use href="#pole" x="880" y="188" width="42" height="112"/>
+          <use href="#pole" x="990" y="188" width="42" height="112"/>
+          <use href="#pole" x="1100" y="188" width="42" height="112"/>
+          <rect x="1018" y="222" width="18" height="30" rx="4" fill="#fff" opacity=".9"/>
+          <rect x="1021" y="217" width="12" height="6" rx="2" fill="#FFC70C"/>
+        </g>
+        <use href="#house" x="820" y="244" width="70" height="60"/>
+        <use href="#house" x="935" y="248" width="64" height="55"/>
+        <use href="#house" x="1050" y="244" width="70" height="60"/>
+        <use href="#house" x="1140" y="250" width="62" height="52"/>
+
+        <!-- ILUSTRASI METERAN LISTRIK: Digeser ke kiri & diturunkan (X=900, Y=130) agar tidak tertimpa Logo PLN -->
+        <g transform="translate(900, 130)">
+          <rect width="84" height="98" rx="12" fill="#fff" opacity=".16"/>
+          <rect width="84" height="98" rx="12" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+          <circle cx="42" cy="42" r="26" fill="none" stroke="#fff" stroke-width="5" opacity=".35"/>
+          <circle cx="42" cy="42" r="26" fill="none" stroke="#FFC70C" stroke-width="5" stroke-linecap="round" stroke-dasharray="110 160" transform="rotate(-210 42 42)"/>
+          <path d="M44 26L33 46H41L38 60L51 38H43Z" fill="#FFC70C"/>
+          <rect x="18" y="80" width="48" height="7" rx="3" fill="#fff" opacity=".6"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- LOGO DANANTARA INDONESIA (KIRI) DAN LOGO PLN (KANAN) -->
+    <div class="hero-brands">
+      <!-- Logo Danantara Indonesia -->
+      <div class="brand-card">
+        <svg width="150" height="32" viewBox="0 0 250 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ikon D Danantara -->
+          <path d="M0 8C0 3.58172 3.58172 0 8 0H24C39.464 0 52 12.536 52 28C52 43.464 39.464 56 24 56H8C3.58172 56 0 52.4183 0 48V8Z" fill="#000000"/>
+          <path d="M5 28C14 18 28 20 38 27C30 30 20 33 13 42C10 38 7 32 5 28Z" fill="#ED1C24"/>
+          <path d="M13 42C20 33 30 30 38 27C34 32 28 35 22 35C18 35 15 38 13 42Z" fill="#FFFFFF"/>
+          <!-- Teks Danantara Indonesia -->
+          <text x="62" y="24" fill="#000000" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="22">Danantara</text>
+          <text x="62" y="47" fill="#000000" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="22">Indonesia</text>
+        </svg>
+      </div>
+
+      <!-- Logo PLN -->
+      <div class="brand-card">
+        <svg width="115" height="34" viewBox="0 0 170 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Kotak Kuning PLN -->
+          <rect width="50" height="50" fill="#FFD700"/>
+          <!-- Gelombang Biru Air -->
+          <path d="M8 22 Q 13 18, 18 22 T 28 22 T 38 22 T 44 22" fill="none" stroke="#00A3E0" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M8 30 Q 13 26, 18 30 T 28 30 T 38 30 T 44 30" fill="none" stroke="#00A3E0" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M8 38 Q 13 34, 18 38 T 28 38 T 38 38 T 44 38" fill="none" stroke="#00A3E0" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Petir Merah -->
+          <path d="M29 5 L13 26 H24 L20 45 L38 22 H27 L29 5 Z" fill="#ED1C24"/>
+          <!-- Teks PLN Biru -->
+          <text x="62" y="38" fill="#00A3E0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="38" letter-spacing="2">PLN</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero-in">
+      <div>
+        <h1>MONITORING ASET JARINGAN &amp; PELANGGAN</h1>
+        <p class="sub" id="heroSub">Area Cikokol Periode 2026</p>
+      </div>
+      <div class="ctl">
+        <div class="mp">
+          <button type="button" class="glass mp-btn" id="mpBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="mpPanel">
+            <span id="mpLabel">Pilih periode</span>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg>
+          </button>
+          <div class="mp-panel" id="mpPanel" role="dialog" aria-label="Pilih bulan dan tahun" hidden>
+            <div class="mp-year">
+              <button type="button" class="mp-nav" id="mpPrev" aria-label="Tahun sebelumnya">&#8249;</button>
+              <span id="mpYear">-</span>
+              <button type="button" class="mp-nav" id="mpNext" aria-label="Tahun berikutnya">&#8250;</button>
+            </div>
+            <div class="mp-grid" id="mpGrid"></div>
+          </div>
+        </div>
+        <select class="glass" id="areaSel" aria-label="Pilih area" hidden></select>
+        <button type="button" class="glass" id="adminBtn">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>
+          <span id="adminLabel">Admin</span>
+        </button>
+        <div class="sync" id="sync" data-state="loading" role="status" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span><strong id="syncLabel">Menghubungkan…</strong><small id="syncTime">-</small></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="card adm" id="adminPanel" aria-label="Panel admin" hidden>
+    <h2>Panel admin</h2>
+    <p class="hint">Data utama diinput dengan mengedit Google Sheets. Pengaturan di panel ini hanya berlaku pada browser ini.</p>
+    <div class="adm-row">
+      <div>
+        <label for="srcIn">Sumber data (link Google Sheets, atau URL CSV/XLSX)</label>
+        <div class="adm-f">
+          <input type="text" id="srcIn" placeholder="https://docs.google.com/spreadsheets/d/…" autocomplete="off">
+          <button type="button" class="btn1" id="srcSave">Simpan</button>
+          <button type="button" class="btn2" id="srcReset">Atur ulang</button>
+        </div>
+      </div>
+      <div>
+        <span class="lbl">File lokal (CSV atau XLSX)</span>
+        <div class="adm-f" id="fileSlot"></div>
+      </div>
+    </div>
+    <div class="adm-f">
+      <button type="button" class="lnk" id="tplBtn">Unduh template CSV</button>
+      <button type="button" class="lnk" id="outBtn">Keluar admin</button>
+    </div>
+  </section>
+
+  <section class="card empty" id="empty">
+    <h2 id="emptyT">Memuat data…</h2>
+    <p id="emptyP">Mengambil data terbaru dari Google Sheets.</p>
+  </section>
+
+  <main id="main" hidden>
+    <section class="g4" aria-label="Indikator utama">
+      <article class="card kpi wm-plg"><p class="lbl">Total pelanggan</p><p class="val" id="kPlg">-</p><p class="ksub" id="kPlgS"></p><div id="kPlgD"></div></article>
+      <article class="card kpi wm-pylon"><p class="lbl">Panjang jaringan</p><p class="val" id="kNet">-</p><p class="ksub" id="kNetS"></p><div id="kNetD"></div></article>
+      <article class="card kpi wm-gardu"><p class="lbl">Gardu distribusi</p><p class="val" id="kGar">-</p><p class="ksub" id="kGarS"></p><div id="kGarD"></div></article>
+      <article class="card kpi wm-trafo"><p class="lbl">Daya trafo</p><p class="val" id="kKva">-</p><p class="ksub" id="kKvaS"></p><div id="kKvaD"></div></article>
+    </section>
+
+    <section class="g3">
+      <article class="card wm-big">
+        <h2>Komposisi jaringan</h2>
+        <p class="hint">Panjang saluran per jenis, dalam kms</p>
+        <div class="lg" id="lgBar"></div>
+        <div class="cwrap"><canvas id="cBar" role="img" aria-label="Grafik batang panjang saluran SKTM, SUTM, SUTR, dan SKTR">Panjang saluran per jenis dalam kms.</canvas></div>
+      </article>
+      <article class="card wm-trafo wm-big">
+        <h2>Pelanggan per fasa</h2>
+        <p class="hint">Sebaran pelanggan tersambung</p>
+        <div class="lg" id="lgDonut"></div>
+        <div class="cwrap"><canvas id="cDonut" role="img" aria-label="Grafik donat pelanggan 1 fasa dan 3 fasa">Pelanggan 1 fasa dan 3 fasa.</canvas></div>
+      </article>
+      <article class="card wm-big">
+        <h2>Progres meter digital</h2>
+        <p class="hint">Meter digital terhadap total pelanggan</p>
+        <p class="big" id="mPct">-</p>
+        <p class="ksub" id="mSub"></p>
+        <div class="row"><span>Meter 1 fasa</span><b id="m1T">-</b></div>
+        <div class="track"><div class="fill" id="m1B"></div></div>
+        <div class="row"><span>Meter 3 fasa</span><b id="m3T">-</b></div>
+        <div class="track"><div class="fill y" id="m3B"></div></div>
+      </article>
+    </section>
+
+    <section class="g32">
+      <article class="card wm-big">
+        <h2>Tren pelanggan dan meter digital</h2>
+        <p class="hint">Hingga 12 bulan terakhir sampai periode terpilih</p>
+        <div class="lg"><span><i style="background:linear-gradient(#2E8BE0,#00305F)"></i>Pelanggan</span><span><i style="background:linear-gradient(#FFE680,#F5A000)"></i>Meter digital</span></div>
+        <div class="cwrap"><canvas id="cTrend" role="img" aria-label="Grafik garis tren total pelanggan dan meter digital per bulan">Tren pelanggan dan meter digital per bulan.</canvas></div>
+      </article>
+      <article class="card wm-trafo">
+        <h2>Indikator operasional</h2>
+        <p class="hint">Dihitung dari data periode terpilih</p>
+        <div class="stat"><span>Pelanggan per gardu</span><b id="rPg">-</b></div>
+        <div class="stat"><span>Daya per trafo</span><b id="rKt">-</b></div>
+        <div class="row" style="margin-top:12px"><span>Kabel tanah pada JTM (SKTM)</span><b id="rJtmT">-</b></div>
+        <div class="track"><div class="fill" id="rJtmB"></div></div>
+        <div class="row"><span>Kabel tanah pada JTR (SKTR)</span><b id="rJtrT">-</b></div>
+        <div class="track"><div class="fill y" id="rJtrB"></div></div>
+      </article>
+    </section>
+
+    <section class="card wm-big">
+      <h2>Rincian aset</h2>
+      <p class="hint">Pilih baris untuk melihat rincian dan perubahan dari bulan lalu</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th scope="col">Kategori</th><th scope="col" class="n">Nilai</th><th scope="col">Satuan</th><th scope="col">Perubahan</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <p class="foot" id="srcInfo"></p>
+</div>
+
+<dialog id="loginDlg" aria-labelledby="loginT">
+  <form id="loginForm" autocomplete="off">
+    <h2 id="loginT">Masuk admin</h2>
+    <p>Masukkan kata sandi untuk mengelola sumber data.</p>
+    <label for="pw">Kata sandi</label>
+    <input type="password" id="pw" autocomplete="current-password" required>
+    <p class="err" id="pwErr" role="alert" hidden></p>
+    <div class="acts">
+      <button type="button" class="btn2" id="pwCancel">Batal</button>
+      <button type="submit" class="btn1">Masuk</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* ================= Konfigurasi ================= */
+const CONFIG = {
+  sheetId: '1jrUHO3mCiz5lI0K4gmh2SomRaf4D0XgjjtFeoL8Bam0', // spreadsheet "DATA JARINGAN PELANGGAN CIKOKOL"
+  sheetName: 'Sheet1',
+  pollMs: 8000,        // 5000-10000 ms
+  heroImageUrl: '',    // isi dengan URL foto infrastruktur untuk mengganti ilustrasi bawaan
+  adminHash: '6ae0340e0b7178021dc8a1907b8b710ec4e6a54df894e94fd9b026a44c8d18a4'
+};
+CONFIG.pollMs = Math.min(10000, Math.max(5000, CONFIG.pollMs));
+
+/* ================= Konstanta ================= */
+const MONTHS = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const MON3 = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const MON_KEYS = {jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
+const FIELDS = ['sutm','sktm','sutr','sktr','penyulang','penyulangDist','cubicle','gardu','trafoUnit','trafoKva','tiangTm','tiangTr','plg1','plg3','dayaPlg','meter1','meter3'];
+const DEC_FIELDS = new Set(['sutm','sktm','sutr','sktr','dayaPlg']);
+const ALIASES = {
+  period:['periode','bulan','period','month','tanggal','date'],
+  area:['area','up3','ulp','unit'],
+  sutm:['sutm','sutmkms'], sktm:['sktm','sktmkms'], sutr:['sutr','sutrkms'], sktr:['sktr','sktrkms'],
+  penyulang:['penyulanglbt','penyulang','jumlahpenyulang'],
+  penyulangDist:['penyulangdist','penyulangdistribusi'],
+  cubicle:['cubicle','jumlahcubicle'],
+  gardu:['gardudistribusi','gardu','jumlahgardu'],
+  trafoUnit:['trafounit','unittrafo','trafo'],
+  trafoKva:['trafokva','dayatrafo','trafodaya'],
+  tiangTm:['tiangtm'], tiangTr:['tiangtr'],
+  plg1:['plg1fasa','pelanggan1fasa','plg1','pelanggan1'],
+  plg3:['plg3fasa','pelanggan3fasa','plg3','pelanggan3'],
+  dayaPlg:['dayaplgva','dayaplgkva','dayapelanggan','dayaplg','jmldaya','dayakva'],
+  meter1:['meterdigital1fasa','meter1fasa','meter1'],
+  meter3:['meterdigital3fasa','meter3fasa','meter3']
+};
+const CSV_HEADER = 'periode,no,area,sutm_kms,sktm_kms,jtm_kms,penyulang_lbt,penyulang_dist,sutr_kms,sktr_kms,jtr_kms,cubicle,gardu_distribusi,trafo_unit,trafo_kva,tiang_tm,tiang_tr,plg_1fasa,plg_3fasa,plg_total,daya_plg_va,meter_digital_1fasa,meter_digital_3fasa';
+const SRC_KEY = 'cikokol_src', ADMIN_KEY = 'cikokol_admin';
+
+const $ = s => document.querySelector(s);
+const state = {rows:[], period:null, area:'ALL', mode:'loading', hash:'', open:new Set(['jtm']), periods:[], trendSel:-1, admin:false};
+const store = {
+  get(k){ try{ return localStorage.getItem(k) || ''; }catch(e){ return ''; } },
+  set(k,v){ try{ v ? localStorage.setItem(k,v) : localStorage.removeItem(k); }catch(e){} }
+};
+
+/* ================= Utilitas ================= */
+const fmtCache = {};
+function fmt(n, d = 0){
+  if(!fmtCache[d]) fmtCache[d] = new Intl.NumberFormat('id-ID',{minimumFractionDigits:0,maximumFractionDigits:d});
+  return fmtCache[d].format(isFinite(n) ? n : 0);
+}
+const ym = (y, m) => y + '-' + String(m).padStart(2,'0');
+const prevPeriod = p => { let y = +p.slice(0,4), m = +p.slice(5,7) - 1; if(m < 1){ m = 12; y--; } return ym(y,m); };
+const clock = () => new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Jakarta',hour12:false}) + ' WIB';
+const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+
+function toNum(v, field){
+  if(typeof v === 'number') return isFinite(v) ? v : 0;
+  let s = String(v ?? '').replace(/rp|%|\s/gi,'');
+  if(!/\d/.test(s)) return 0;
+  if(!DEC_FIELDS.has(field)){
+    s = s.replace(/[.,]/g,'');
+  }else{
+    const lastDot = s.lastIndexOf('.'), lastCom = s.lastIndexOf(',');
+    if(lastDot >= 0 && lastCom >= 0){
+      s = lastCom > lastDot ? s.replace(/\./g,'').replace(',','.') : s.replace(/,/g,'');
+    }else if(lastCom >= 0){
+      s = (s.match(/,/g).length > 1) ? s.replace(/,/g,'') : s.replace(',','.');
+    }else if(lastDot >= 0 && (s.match(/\./g).length > 1)){
+      s = s.replace(/\./g,'');
+    }
+  }
+  const n = parseFloat(s);
+  return isFinite(n) ? n : 0;
+}
+
+function parsePeriod(v){
+  if(v instanceof Date && !isNaN(v)) return ym(v.getFullYear(), v.getMonth() + 1);
+  if(typeof v === 'number' && v > 20000){ const d = new Date(Math.round((v - 25569) * 864e5)); return ym(d.getUTCFullYear(), d.getUTCMonth() + 1); }
+  const s = String(v ?? '').trim().toLowerCase();
+  if(!s) return null;
+  let m = s.match(/^date\((\d{4}),\s*(\d{1,2})/);
+  if(m) return ym(+m[1], +m[2] + 1);
+  m = s.match(/^(\d{4})[-\/.](\d{1,2})/);
+  if(m && +m[2] >= 1 && +m[2] <= 12) return ym(+m[1], +m[2]);
+  m = s.match(/^(\d{1,2})[-\/.](\d{4})$/);
+  if(m && +m[1] >= 1 && +m[1] <= 12) return ym(+m[2], +m[1]);
+  m = s.match(/^\d{1,2}[-\/.](\d{1,2})[-\/.](\d{4})$/);
+  if(m && +m[1] >= 1 && +m[1] <= 12) return ym(+m[2], +m[1]);
+  m = s.match(/([a-z]+)[\s\-\/]+(\d{4})/);
+  if(m){ const i = MON_KEYS[m[1].slice(0,3)]; if(i) return ym(+m[2], i); }
+  return null;
+}
+
+function normalizeRows(raw){
+  if(!raw || !raw.length) throw new Error('Data kosong');
+  const keys = Object.keys(raw[0]);
+  const map = {};
+  Object.keys(ALIASES).forEach(f => { map[f] = keys.find(k => ALIASES[f].includes(norm(k))); });
+  if(map.period === undefined) throw new Error('Kolom periode tidak ditemukan');
+  if(!FIELDS.some(f => map[f] !== undefined)) throw new Error('Kolom data aset tidak dikenali');
+  const rows = raw.map(r => {
+    const area = String(map.area !== undefined ? r[map.area] : '').trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) || 'Cikokol';
+    const o = {period: parsePeriod(r[map.period]), area};
+    FIELDS.forEach(f => { o[f] = map[f] !== undefined ? toNum(r[map[f]], f) : 0; });
+    if(o.dayaPlg > 1e8) o.dayaPlg = o.dayaPlg / 1000;
+    return o;
+  }).filter(o => o.period);
+  if(!rows.length) throw new Error('Nilai periode tidak valid');
+  return rows;
+}
+
+/* ================= Sumber data ================= */
+const isXlsxUrl = u => /\.(xlsx|xls|xlsm)$/.test(u.split('?')[0].toLowerCase());
+function parseXlsx(buf){
+  const wb = XLSX.read(buf, {type:'array', cellDates:true});
+  return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:'', raw:true});
+}
+function parseCsv(text){
+  return Papa.parse(text, {header:true, skipEmptyLines:true}).data;
+}
+function sheetIdOf(src){
+  return (src.match(/\/d\/([\w-]+)/) || [])[1] || (/^[\w-]{25,}$/.test(src) ? src : '') || (src ? '' : CONFIG.sheetId);
+}
+
+function gvizRows(id, sheet){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    let done = false;
+    const finish = fn => { if(done) return; done = true; clearTimeout(timer); s.remove(); fn(); };
+    const timer = setTimeout(() => finish(() => reject(new Error('Google Sheets tidak merespons'))), 12000);
+    window.google = window.google || {};
+    window.google.visualization = window.google.visualization || {};
+    window.google.visualization.Query = {setResponse(resp){
+      finish(() => {
+        if(resp.status === 'error'){
+          const m = resp.errors && resp.errors[0] && (resp.errors[0].detailed_message || resp.errors[0].message);
+          return reject(new Error(m || 'Akses ke spreadsheet ditolak'));
+        }
+        const cols = resp.table.cols.map(c => c.label || c.id);
+        resolve(resp.table.rows.map(r => { const o = {}; cols.forEach((k, i) => { const c = r.c && r.c[i]; o[k] = c && c.v != null ? c.v : ''; }); return o; }));
+      });
+    }};
+    s.onerror = () => finish(() => reject(new Error('Tidak dapat menjangkau Google Sheets')));
+    s.onload = () => setTimeout(() => finish(() => reject(new Error('Spreadsheet belum dibagikan ke publik'))), 0);
+    s.src = 'https://docs.google.com/spreadsheets/d/' + id + '/gviz/tq?tqx=out:json&headers=1&sheet=' + encodeURIComponent(sheet) + '&_=' + Date.now();
+    document.head.appendChild(s);
+  });
+}
+async function fetchRows(base){
+  const url = base + (base.includes('?') ? '&' : '?') + '_=' + Date.now();
+  const res = await fetch(url, {cache:'no-store'});
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return isXlsxUrl(base) ? parseXlsx(await res.arrayBuffer()) : parseCsv(await res.text());
+}
+async function loadRemote(){
+  const src = store.get(SRC_KEY).trim(), id = sheetIdOf(src);
+  const tries = [];
+  if(id){
+    const b = 'https://docs.google.com/spreadsheets/d/' + id;
+    tries.push(() => gvizRows(id, CONFIG.sheetName));
+    tries.push(() => fetchRows(b + '/gviz/tq?tqx=out:csv&headers=1&sheet=' + encodeURIComponent(CONFIG.sheetName)));
+    tries.push(() => fetchRows(b + '/export?format=csv'));
+  }else{
+    tries.push(() => fetchRows(src));
+  }
+  let lastErr = new Error('Sumber data kosong');
+  for(const t of tries){
+    try{ return normalizeRows(await t()); }catch(err){ lastErr = err; }
+  }
+  throw lastErr;
+}
+
+/* ================= Agregasi ================= */
+function aggregate(period, area){
+  const sel = state.rows.filter(r => r.period === period && (area === 'ALL' || r.area === area));
+  if(!sel.length) return null;
+  const o = {};
+  FIELDS.forEach(f => { o[f] = sel.reduce((a, r) => a + r[f], 0); });
+  return o;
+}
+
+/* ================= Komponen UI ================= */
+function chip(cur, prev, short){
+  if(prev == null || !isFinite(prev) || prev === 0) return '<span class="chip flat">Belum ada pembanding</span>';
+  const d = (cur - prev) / prev * 100;
+  const tail = short ? '' : ' vs bulan lalu';
+  if(Math.abs(d) < 0.05) return '<span class="chip flat">Stabil' + tail + '</span>';
+  const up = d > 0;
+  return '<span class="chip ' + (up ? 'up' : 'down') + '">' + (up ? '\u25B2 +' : '\u25BC \u2212') + fmt(Math.abs(d), 1) + '%' + tail + '</span>';
+}
+function setBar(id, pct){ $(id).style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+function legend(el, items){
+  el.innerHTML = '';
+  items.forEach(it => {
+    const s = document.createElement('span');
+    const i = document.createElement('i'); i.style.background = it.bg;
+    const t = document.createTextNode(it.label + ' ');
+    const b = document.createElement('b'); b.textContent = it.value;
+    s.append(i, t, b); el.appendChild(s);
+  });
+}
+function showEmpty(title, msg){
+  $('#emptyT').textContent = title; $('#emptyP').textContent = msg;
+  $('#empty').hidden = false; $('#main').hidden = true;
+}
+
+/* ================= Grafik ================= */
+Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#4A5A6A';
+
+const BAR_LABELS = ['SKTM','SUTM','SUTR','SKTR'];
+const BAR_PAIRS = [['#5FB0FF','#00305F'],['#9ED0FF','#1F78D1'],['#FFE680','#E59A00'],['#FFD43B','#C96F00']];
+const BAR_SIDE = ['#001F40','#14508F','#A86F00','#8C4F00'];
+const ARC_PAIRS = [['#5FB0FF','#00305F'],['#FFE680','#E58A00']];
+const ARC_SIDE = ['#001F40','#9A5A00'];
+const DEPTH = 12;
+
+const extrudeBars = {
+  id:'extrudeBars',
+  beforeDatasetsDraw(chart){
+    const ctx = chart.ctx, d = 10, dy = 6;
+    chart.getDatasetMeta(0).data.forEach((bar, i) => {
+      const p = bar.getProps(['x','y','base','width'], true);
+      const l = p.x - p.width/2, r = p.x + p.width/2;
+      const top = Math.min(p.y, p.base), bot = Math.max(p.y, p.base);
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,40,90,.18)'; ctx.shadowColor = 'rgba(0,40,90,.3)'; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.ellipse(p.x + d/2, bot + 2, p.width/2 + d, 5, 0, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = BAR_SIDE[i];
+      ctx.beginPath(); ctx.moveTo(r, top); ctx.lineTo(r + d, top - dy); ctx.lineTo(r + d, bot - dy); ctx.lineTo(r, bot); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = BAR_PAIRS[i][0];
+      ctx.beginPath(); ctx.moveTo(l, top); ctx.lineTo(l + d, top - dy); ctx.lineTo(r + d, top - dy); ctx.lineTo(r, top); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    });
+  }
+};
+const extrudeDonut = {
+  id:'extrudeDonut',
+  beforeDatasetsDraw(chart){
+    const meta = chart.getDatasetMeta(0), ctx = chart.ctx;
+    if(!meta.data.length) return;
+    const f = meta.data[0].getProps(['x','y','outerRadius'], true);
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,40,90,.22)'; ctx.shadowColor = 'rgba(0,40,90,.35)'; ctx.shadowBlur = 16;
+    ctx.beginPath(); ctx.ellipse(f.x, f.y + f.outerRadius + DEPTH + 6, f.outerRadius * .85, 9, 0, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+    for(let k = DEPTH; k >= 1; k--){
+      meta.data.forEach((arc, i) => {
+        const a = arc.getProps(['x','y','startAngle','endAngle','innerRadius','outerRadius'], true);
+        if(a.endAngle === a.startAngle) return;
+        ctx.beginPath();
+        ctx.arc(a.x, a.y + k, a.outerRadius, a.startAngle, a.endAngle);
+        ctx.arc(a.x, a.y + k, a.innerRadius, a.endAngle, a.startAngle, true);
+        ctx.closePath(); ctx.fillStyle = ARC_SIDE[i]; ctx.fill();
+      });
+    }
+  }
+};
+const centerText = {
+  id:'centerText',
+  afterDatasetsDraw(chart){
+    const m = chart.getDatasetMeta(0); if(!m.data.length) return;
+    const c = m.data[0].getProps(['x','y'], true), ctx = chart.ctx;
+    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#4A5A6A'; ctx.font = "500 12px 'Plus Jakarta Sans', sans-serif"; ctx.fillText('Total pelanggan', c.x, c.y - 13);
+    ctx.fillStyle = '#00305F'; ctx.font = "800 22px 'Plus Jakarta Sans', sans-serif"; ctx.fillText(fmt(chart.$total || 0), c.x, c.y + 9);
+    ctx.restore();
+  }
+};
+const lineShadow = {
+  id:'lineShadow',
+  beforeDatasetDraw(chart){ const c = chart.ctx; c.save(); c.shadowColor = 'rgba(0,48,95,.35)'; c.shadowBlur = 12; c.shadowOffsetY = 8; },
+  afterDatasetDraw(chart){ chart.ctx.restore(); }
+};
+
+function gradBar(c){
+  const el = c.element, pair = BAR_PAIRS[c.dataIndex];
+  if(!el || el.y == null || el.base == null) return pair[1];
+  const g = c.chart.ctx.createLinearGradient(0, el.y, 0, el.base);
+  g.addColorStop(0, pair[0]); g.addColorStop(1, pair[1]); return g;
+}
+function gradArc(c){
+  const el = c.element, pair = ARC_PAIRS[c.dataIndex];
+  if(!el || !el.outerRadius || el.outerRadius <= el.innerRadius) return pair[1];
+  const g = c.chart.ctx.createRadialGradient(el.x, el.y, el.innerRadius, el.x, el.y, el.outerRadius);
+  g.addColorStop(0, pair[0]); g.addColorStop(1, pair[1]); return g;
+}
+function areaGrad(c, c0, c1){
+  const a = c.chart.chartArea; if(!a) return c0;
+  const g = c.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom);
+  g.addColorStop(0, c0); g.addColorStop(1, c1); return g;
+}
+const gridColor = 'rgba(0,48,95,.1)';
+
+const barChart = new Chart($('#cBar'), {
+  type:'bar',
+  data:{labels:BAR_LABELS, datasets:[{data:[0,0,0,0], backgroundColor:gradBar, borderSkipped:false, maxBarThickness:46}]},
+  options:{responsive:true, maintainAspectRatio:false, layout:{padding:{top:16,right:16}},
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:c => ' ' + fmt(c.parsed.y, 2) + ' kms'}}},
+    scales:{x:{grid:{display:false}, ticks:{font:{weight:700}}}, y:{beginAtZero:true, border:{display:false}, grid:{color:gridColor}, ticks:{callback:v => fmt(v)}}}},
+  plugins:[extrudeBars]
+});
+const donutChart = new Chart($('#cDonut'), {
+  type:'doughnut',
+  data:{labels:['1 fasa','3 fasa'], datasets:[{data:[1,0], backgroundColor:gradArc, borderColor:'#fff', borderWidth:2, hoverOffset:6}]},
+  options:{responsive:true, maintainAspectRatio:false, cutout:'62%', layout:{padding:{top:6,bottom:30,left:10,right:10}},
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:c => ' ' + c.label + ': ' + fmt(c.parsed) + ' pelanggan'}}}},
+  plugins:[extrudeDonut, centerText]
+});
+const isSel = c => c.dataIndex === state.trendSel;
+function pointOpts(color){
+  return {
+    pointRadius:c => isSel(c) ? 7 : 3,
+    pointBackgroundColor:c => isSel(c) ? '#fff' : color,
+    pointBorderColor:color,
+    pointBorderWidth:c => isSel(c) ? 3 : 2,
+    pointHoverRadius:8
+  };
+}
+const trendChart = new Chart($('#cTrend'), {
+  type:'line',
+  data:{labels:[], datasets:[
+    Object.assign({label:'Pelanggan', data:[], borderColor:'#00529C', borderWidth:3, tension:.35, fill:true,
+      backgroundColor:c => areaGrad(c,'rgba(46,139,224,.45)','rgba(46,139,224,0)')}, pointOpts('#00529C')),
+    Object.assign({label:'Meter digital', data:[], borderColor:'#F5A000', borderWidth:3, tension:.35, fill:true,
+      backgroundColor:c => areaGrad(c,'rgba(255,199,12,.5)','rgba(255,199,12,0)')}, pointOpts('#F5A000'))
+  ]},
+  options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index', intersect:false}, layout:{padding:{top:10,right:12}},
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:c => ' ' + c.dataset.label + ': ' + fmt(c.parsed.y)}}},
+    scales:{x:{grid:{display:false}}, y:{border:{display:false}, grid:{color:gridColor}, ticks:{callback:v => fmt(v)}}}},
+  plugins:[lineShadow]
+});
+
+/* ================= Render ================= */
+function renderKpis(c, p){
+  const jtm = c.sutm + c.sktm, jtr = c.sutr + c.sktr;
+  const pj = p ? p.sutm + p.sktm + p.sutr + p.sktr : null;
+  $('#kPlg').textContent = fmt(c.plg1 + c.plg3);
+  $('#kPlgS').textContent = '1 fasa ' + fmt(c.plg1) + ', 3 fasa ' + fmt(c.plg3);
+  $('#kPlgD').innerHTML = chip(c.plg1 + c.plg3, p && p.plg1 + p.plg3);
+  $('#kNet').innerHTML = fmt(jtm + jtr, 1) + ' <small>kms</small>';
+  $('#kNetS').textContent = 'JTM ' + fmt(jtm, 1) + ', JTR ' + fmt(jtr, 1);
+  $('#kNetD').innerHTML = chip(jtm + jtr, pj);
+  $('#kGar').textContent = fmt(c.gardu);
+  $('#kGarS').textContent = 'Trafo ' + fmt(c.trafoUnit) + ' unit';
+  $('#kGarD').innerHTML = chip(c.gardu, p && p.gardu);
+  $('#kKva').innerHTML = fmt(c.trafoKva) + ' <small>kVA</small>';
+  $('#kKvaS').textContent = 'Rata-rata ' + fmt(c.trafoUnit ? c.trafoKva / c.trafoUnit : 0) + ' kVA per unit';
+  $('#kKvaD').innerHTML = chip(c.trafoKva, p && p.trafoKva);
+}
+
+function renderCharts(c, animate){
+  const mode = animate ? undefined : 'none';
+  const barVals = [c.sktm, c.sutm, c.sutr, c.sktr];
+  barChart.data.datasets[0].data = barVals;
+  legend($('#lgBar'), BAR_LABELS.map((l, i) => ({label:l, value:fmt(barVals[i], 1) + ' kms', bg:'linear-gradient(' + BAR_PAIRS[i][0] + ',' + BAR_PAIRS[i][1] + ')'})));
+  barChart.update(mode);
+
+  const tot = c.plg1 + c.plg3;
+  donutChart.$total = tot;
+  donutChart.data.datasets[0].data = [c.plg1, c.plg3];
+  legend($('#lgDonut'), [
+    {label:'1 fasa', value:fmt(tot ? c.plg1 / tot * 100 : 0, 1) + '%', bg:'linear-gradient(#5FB0FF,#00305F)'},
+    {label:'3 fasa', value:fmt(tot ? c.plg3 / tot * 100 : 0, 1) + '%', bg:'linear-gradient(#FFE680,#E58A00)'}
+  ]);
+  donutChart.update(mode);
+
+  const list = state.periods.filter(p => p <= state.period).slice(-12);
+  const pts = list.map(p => ({p, a:aggregate(p, state.area)})).filter(x => x.a);
+  state.trendSel = pts.findIndex(x => x.p === state.period);
+  trendChart.data.labels = pts.map(x => MON3[+x.p.slice(5,7) - 1] + ' ' + x.p.slice(2,4));
+  trendChart.data.datasets[0].data = pts.map(x => x.a.plg1 + x.a.plg3);
+  trendChart.data.datasets[1].data = pts.map(x => x.a.meter1 + x.a.meter3);
+  trendChart.update(mode);
+}
+
+function renderMeter(c){
+  const tot = c.plg1 + c.plg3, mt = c.meter1 + c.meter3;
+  const pct = tot ? mt / tot * 100 : 0;
+  const p1 = c.plg1 ? c.meter1 / c.plg1 * 100 : 0, p3 = c.plg3 ? c.meter3 / c.plg3 * 100 : 0;
+  $('#mPct').textContent = fmt(pct, 1) + '%';
+  $('#mSub').textContent = fmt(mt) + ' dari ' + fmt(tot) + ' pelanggan';
+  $('#m1T').textContent = fmt(c.meter1) + ' (' + fmt(p1, 1) + '%)';
+  $('#m3T').textContent = fmt(c.meter3) + ' (' + fmt(p3, 1) + '%)';
+  setBar('#m1B', p1); setBar('#m3B', p3);
+}
+
+function renderRatios(c){
+  const jtm = c.sutm + c.sktm, jtr = c.sutr + c.sktr;
+  const a = jtm ? c.sktm / jtm * 100 : 0, b = jtr ? c.sktr / jtr * 100 : 0;
+  $('#rPg').textContent = fmt(c.gardu ? (c.plg1 + c.plg3) / c.gardu : 0);
+  $('#rKt').textContent = fmt(c.trafoUnit ? c.trafoKva / c.trafoUnit : 0) + ' kVA';
+  $('#rJtmT').textContent = fmt(a, 1) + '%'; setBar('#rJtmB', a);
+  $('#rJtrT').textContent = fmt(b, 1) + '%'; setBar('#rJtrB', b);
+}
+
+const CHEV = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2l5 5-5 5"/></svg>';
+function tableModel(c, p){
+  const pv = f => p ? p[f] : null;
+  const ps = (...fs) => p ? fs.reduce((a, f) => a + p[f], 0) : null;
+  const jtmItems = [['SUTM',c.sutm,pv('sutm'),'kms',2],['SKTM',c.sktm,pv('sktm'),'kms',2],['Penyulang LBT',c.penyulang,pv('penyulang'),'buah',0]];
+  if(c.penyulangDist > 0) jtmItems.push(['Penyulang distribusi',c.penyulangDist,pv('penyulangDist'),'buah',0]);
+  return [
+    {k:'jtm', name:'Jaringan tegangan menengah', desc:'SUTM dan SKTM', unit:'kms', d:1, val:c.sutm + c.sktm, prev:ps('sutm','sktm'), items:jtmItems},
+    {k:'jtr', name:'Jaringan tegangan rendah', desc:'SUTR dan SKTR', unit:'kms', d:1, val:c.sutr + c.sktr, prev:ps('sutr','sktr'),
+      items:[['SUTR',c.sutr,pv('sutr'),'kms',2],['SKTR',c.sktr,pv('sktr'),'kms',2],['Cubicle',c.cubicle,pv('cubicle'),'buah',0]]},
+    {k:'gar', name:'Gardu dan trafo distribusi', desc:'Jumlah gardu', unit:'buah', d:0, val:c.gardu, prev:pv('gardu'),
+      items:[['Trafo',c.trafoUnit,pv('trafoUnit'),'unit',0],['Daya trafo',c.trafoKva,pv('trafoKva'),'kVA',0]]},
+    {k:'tng', name:'Tiang', desc:'Tiang TM dan TR', unit:'btg', d:0, val:c.tiangTm + c.tiangTr, prev:ps('tiangTm','tiangTr'),
+      items:[['Tiang TM',c.tiangTm,pv('tiangTm'),'btg',0],['Tiang TR',c.tiangTr,pv('tiangTr'),'btg',0]]},
+    {k:'plg', name:'Pelanggan tersambung', desc:'1 fasa dan 3 fasa', unit:'buah', d:0, val:c.plg1 + c.plg3, prev:ps('plg1','plg3'),
+      items:[['1 fasa',c.plg1,pv('plg1'),'buah',0],['3 fasa',c.plg3,pv('plg3'),'buah',0],['Daya tersambung',c.dayaPlg,pv('dayaPlg'),'kVA',0]]},
+    {k:'mtr', name:'Meter digital', desc:'1 fasa dan 3 fasa', unit:'buah', d:0, val:c.meter1 + c.meter3, prev:ps('meter1','meter3'),
+      items:[['Meter 1 fasa',c.meter1,pv('meter1'),'buah',0],['Meter 3 fasa',c.meter3,pv('meter3'),'buah',0]]}
+  ];
+}
+function renderTable(c, p){
+  const tb = $('#tbody'); tb.innerHTML = '';
+  tableModel(c, p).forEach(r => {
+    const open = state.open.has(r.k);
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><button type="button" class="tg" data-k="' + r.k + '" aria-expanded="' + open + '" aria-controls="dt-' + r.k + '">' + CHEV + '<span>' + r.name + '</span></button><span class="desc">' + r.desc + '</span></td>' +
+      '<td class="n">' + fmt(r.val, r.d) + '</td><td>' + r.unit + '</td><td>' + chip(r.val, r.prev, true) + '</td>';
+    const dt = document.createElement('tr');
+    dt.className = 'dt'; dt.id = 'dt-' + r.k; dt.hidden = !open;
+    dt.innerHTML = '<td colspan="4"><div class="dgrid">' + r.items.map(it =>
+      '<div class="dc"><p>' + it[0] + '</p><b>' + fmt(it[1], it[4]) + ' <small>' + it[3] + '</small></b>' + chip(it[1], it[2], true) + '</div>').join('') + '</div></td>';
+    tb.append(tr, dt);
+  });
+}
+$('#tbody').addEventListener('click', e => {
+  const btn = e.target.closest('.tg'); if(!btn) return;
+  const k = btn.dataset.k, row = document.getElementById('dt-' + k);
+  const open = row.hidden;
+  row.hidden = !open; btn.setAttribute('aria-expanded', String(open));
+  open ? state.open.add(k) : state.open.delete(k);
+});
+
+function updateHead(){
+  const y = state.period.slice(0,4), m = +state.period.slice(5,7);
+  $('#mpLabel').textContent = MONTHS[m - 1] + ' ' + y;
+  const areas = [...new Set(state.rows.map(r => r.area))];
+  const name = state.area === 'ALL' ? (areas.length === 1 ? areas[0] : 'semua area') : state.area;
+  $('#heroSub').textContent = 'Area ' + name + ' Periode ' + y;
+}
+function renderAll(animate){
+  const cur = state.period ? aggregate(state.period, state.area) : null;
+  if(state.period) updateHead();
+  if(!cur){ showEmpty('Belum ada data untuk periode ini', 'Pilih bulan lain, atau periksa kolom periode dan area pada sumber data.'); return; }
+  const wasHidden = $('#main').hidden;
+  $('#empty').hidden = true; $('#main').hidden = false;
+  if(wasHidden){ barChart.resize(); donutChart.resize(); trendChart.resize(); }
+  const prev = aggregate(prevPeriod(state.period), state.area);
+  renderKpis(cur, prev);
+  renderCharts(cur, animate);
+  renderMeter(cur);
+  renderRatios(cur);
+  renderTable(cur, prev);
+}
+
+/* ================= Pemilih bulan ================= */
+const mp = {viewYear:null};
+function buildPicker(){
+  const set = new Set(state.periods);
+  const years = [...new Set(state.periods.map(p => +p.slice(0,4)))].sort();
+  if(mp.viewYear == null || !years.includes(mp.viewYear)) mp.viewYear = +state.period.slice(0,4);
+  $('#mpYear').textContent = mp.viewYear;
+  $('#mpPrev').disabled = mp.viewYear <= years[0];
+  $('#mpNext').disabled = mp.viewYear >= years[years.length - 1];
+  const grid = $('#mpGrid'); grid.innerHTML = '';
+  for(let i = 1; i <= 12; i++){
+    const key = ym(mp.viewYear, i), b = document.createElement('button');
+    b.type = 'button'; b.className = 'mp-m'; b.textContent = MON3[i - 1];
+    b.disabled = !set.has(key); b.setAttribute('aria-pressed', String(key === state.period));
+    b.addEventListener('click', () => { state.period = key; closePicker(); buildPicker(); renderAll(true); });
+    grid.appendChild(b);
+  }
+}
+function openPicker(){ $('#mpPanel').hidden = false; $('#mpBtn').setAttribute('aria-expanded','true'); }
+function closePicker(){ $('#mpPanel').hidden = true; $('#mpBtn').setAttribute('aria-expanded','false'); }
+$('#mpBtn').addEventListener('click', () => $('#mpPanel').hidden ? openPicker() : closePicker());
+$('#mpPrev').addEventListener('click', () => { mp.viewYear--; buildPicker(); });
+$('#mpNext').addEventListener('click', () => { mp.viewYear++; buildPicker(); });
+document.addEventListener('click', e => { if(!e.target.closest('.mp')) closePicker(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('#mpPanel').hidden){ closePicker(); $('#mpBtn').focus(); } });
+
+function buildAreas(areas){
+  const sel = $('#areaSel');
+  sel.hidden = areas.length < 2;
+  sel.innerHTML = '';
+  const add = (v, t) => { const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); };
+  add('ALL', 'Semua area'); areas.forEach(a => add(a, a));
+  sel.value = state.area;
+}
+$('#areaSel').addEventListener('change', e => { state.area = e.target.value; renderAll(true); });
+
+/* ================= Status sinkron & polling ================= */
+function setSync(st, label, info){
+  $('#sync').dataset.state = st;
+  $('#syncLabel').textContent = label;
+  $('#syncTime').textContent = 'Diperbarui ' + clock();
+  if(info) $('#srcInfo').textContent = info;
+}
+function applyRows(rows, mode){
+  const h = JSON.stringify(rows), first = !state.rows.length;
+  state.mode = mode;
+  if(h === state.hash && !first) return;
+  state.hash = h; state.rows = rows;
+  state.periods = [...new Set(rows.map(r => r.period))].sort();
+  if(!state.periods.includes(state.period)) state.period = state.periods[state.periods.length - 1];
+  const areas = [...new Set(rows.map(r => r.area))].sort();
+  if(state.area !== 'ALL' && !areas.includes(state.area)) state.area = 'ALL';
+  buildPicker(); buildAreas(areas); renderAll(first);
+}
+function resetData(){ state.rows = []; state.hash = ''; state.mode = 'loading'; showEmpty('Memuat data…', 'Mengambil data terbaru dari sumber.'); }
+async function tick(){
+  if(state.mode === 'file' || document.hidden) return;
+  try{
+    applyRows(await loadRemote(), 'live');
+    const custom = store.get(SRC_KEY);
+    setSync('live', 'Real-time tersinkron', 'Sumber: ' + (custom ? 'sumber kustom admin' : 'Google Sheets "DATA JARINGAN PELANGGAN CIKOKOL"') + ', dicek ulang tiap ' + (CONFIG.pollMs / 1000) + ' detik.');
+  }catch(err){
+    if(!state.rows.length){
+      showEmpty('Data belum bisa dimuat', err.message + '. Pastikan spreadsheet dibagikan sebagai "Siapa saja yang memiliki link: Pelihat", tab data bernama Sheet1 dengan header pada baris 1, dan perangkat terhubung internet.');
+      setSync('error', 'Gagal sinkron', 'Mencoba lagi otomatis tiap ' + (CONFIG.pollMs / 1000) + ' detik.');
+    }else{
+      setSync('error', 'Gagal sinkron, memakai data terakhir', 'Mencoba lagi otomatis tiap ' + (CONFIG.pollMs / 1000) + ' detik. Penyebab: ' + err.message);
+    }
+  }
+}
+setInterval(tick, CONFIG.pollMs);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) tick(); });
+
+/* ================= Admin ================= */
+let fails = 0, lockUntil = 0;
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function setAdmin(on){
+  state.admin = on;
+  try{ on ? sessionStorage.setItem(ADMIN_KEY,'1') : sessionStorage.removeItem(ADMIN_KEY); }catch(e){}
+  $('#adminPanel').hidden = !on;
+  $('#adminLabel').textContent = on ? 'Admin aktif' : 'Admin';
+  const slot = $('#fileSlot'); slot.innerHTML = '';
+  if(on){
+    $('#srcIn').value = store.get(SRC_KEY);
+    const pick = document.createElement('button'); pick.type = 'button'; pick.className = 'btn1'; pick.textContent = 'Pilih file';
+    const input = document.createElement('input'); input.type = 'file'; input.accept = '.csv,.xlsx,.xls'; input.hidden = true;
+    const back = document.createElement('button'); back.type = 'button'; back.className = 'btn2'; back.textContent = 'Kembali ke Google Sheets';
+    pick.addEventListener('click', () => input.click());
+    input.addEventListener('change', async () => {
+      const f = input.files[0]; if(!f) return;
+      try{
+        const raw = /\.csv$/i.test(f.name) ? parseCsv(await f.text()) : parseXlsx(await f.arrayBuffer());
+        const rows = normalizeRows(raw);
+        state.rows = []; state.hash = '';
+        applyRows(rows, 'file');
+        setSync('file', 'File lokal dimuat', 'Sumber: ' + f.name + '. Hanya tampil di browser ini; sinkronisasi otomatis dijeda.');
+      }catch(err){
+        setSync('error', 'File tidak terbaca', 'Gagal membaca ' + f.name + ': ' + err.message);
+      }
+      input.value = '';
+    });
+    back.addEventListener('click', () => { resetData(); tick(); });
+    slot.append(pick, input, back);
+  }
+}
+function loginErr(msg){ const e = $('#pwErr'); e.textContent = msg; e.hidden = false; }
+$('#adminBtn').addEventListener('click', () => {
+  if(state.admin){ $('#adminPanel').scrollIntoView({behavior:'smooth', block:'start'}); return; }
+  $('#pwErr').hidden = true; $('#pw').value = '';
+  $('#loginDlg').showModal(); $('#pw').focus();
+});
+$('#pwCancel').addEventListener('click', () => $('#loginDlg').close());
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const now = Date.now();
+  if(now < lockUntil){ loginErr('Terlalu banyak percobaan. Coba lagi dalam beberapa detik.'); return; }
+  let h;
+  try{ h = await sha256($('#pw').value); }
+  catch(_){ loginErr('Browser ini tidak dapat memverifikasi kata sandi di halaman ini.'); return; }
+  if(h === CONFIG.adminHash){ fails = 0; $('#loginDlg').close(); setAdmin(true); }
+  else{ fails++; if(fails >= 5){ lockUntil = now + 30000; fails = 0; } loginErr('Kata sandi salah.'); }
+});
+$('#outBtn').addEventListener('click', () => {
+  const wasFile = state.mode === 'file';
+  setAdmin(false);
+  if(wasFile){ resetData(); tick(); }
+});
+$('#srcSave').addEventListener('click', () => { store.set(SRC_KEY, $('#srcIn').value.trim()); resetData(); tick(); });
+$('#srcReset').addEventListener('click', () => { store.set(SRC_KEY, ''); $('#srcIn').value = ''; resetData(); tick(); });
+$('#tplBtn').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([CSV_HEADER + '\n'], {type:'text/csv'}));
+  a.download = 'template_aset_distribusi.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+/* ================= Hero image opsional & mulai ================= */
+if(CONFIG.heroImageUrl){
+  $('#heroImg').style.backgroundImage = 'url("' + CONFIG.heroImageUrl.replace(/"/g, '') + '")';
+  $('#heroImg').hidden = false; $('#heroArt').style.display = 'none';
+}
+try{ if(sessionStorage.getItem(ADMIN_KEY) === '1') setAdmin(true); }catch(e){}
+tick();
+})();
+</script>
+</body>
+</html>
